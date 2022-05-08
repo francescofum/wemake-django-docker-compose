@@ -1,0 +1,98 @@
+version: '3.9'
+
+services:
+  
+  #*********************#
+  #        MySQL        #
+  #*********************#
+
+  # wemake-db:
+  #   image: mysql:latest
+  #   environment:
+  #     MYSQL_DATABASE: wemake
+  #     MYSQL_USER: wemake 
+  #     MYSQL_PASSWORD: secret
+  #     MYSQL_ROOT_PASSWORD: secret
+  #   ports:
+  #     - 7373:1433
+  #     - 3306:3306
+  #   volumes:
+  #     - ./mysql/data/mysql:/var/lib/mysql
+
+  #*********************#
+  #        MariaDb      #
+  #*********************#
+
+  wemake-db:
+    image: mariadb:latest
+    environment:
+      MYSQL_DATABASE: wemake
+      MYSQL_USER: wemake 
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+    ports:
+      - 7373:1433
+      - 3306:3306
+    volumes:
+      - ./mysql/data/mysql:/var/lib/mysql
+
+  #*********************#
+  #      PhpMyAdmin     #
+  #*********************#
+  wm_django_phpadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8081:80
+    environment:
+      # - PMA_ARBITRARY=1
+      - PMA_HOST=wemake-db
+      - MYSQL_DATABASE=wp
+      - MYSQL_USER=wp 
+      - MYSQL_PASSWORD=secret
+      - MYSQL_ROOT_PASSWORD=secret
+
+  #*********************#
+  #      Django         #
+  #*********************#
+  wm_django_site:
+    build:
+      context: . 
+      dockerfile: ./django/Dockerfile
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django/src:/wemake-src
+    environment:
+      - DATABASE_NAME=wemake
+      - DATABASE_USER=wemake
+      - DATABASE_PASS=secret
+      - DATABASE_HOST=wemake-db
+      - DATABASE_PORT=3306
+    ports:
+      - "8000:8000"
+    depends_on:
+      - wemake-db
+    
+
+  #******************************************
+  # The services below are all slicers. 
+
+  #*********************#
+  #    Slicer-Cura      #
+  #*********************#
+  wm_slicer_cura:
+    build:
+      context: ./slicers/cura
+      dockerfile: Dockerfile
+    command: python python-interface/wemake-cura-server.py
+    volumes:
+      - ./django/src/media/STL:/STL
+      - ./slicers/cura:/cura
+    environment:
+      - USER=USER
+    ports:
+      - 5555:5555
+
+
+
+
