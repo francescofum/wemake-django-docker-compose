@@ -62,7 +62,7 @@ services:
       dockerfile: ./docker-compose/dockerfile-django
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
-      - ./django/src:/wemake-src
+      - ./django:/wemake-src
     environment:
       - DATABASE_NAME=wemake
       - DATABASE_USER=wemake

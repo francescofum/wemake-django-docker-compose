@@ -4,4 +4,4 @@ ENV PYTHONUNBUFFERED=1
 WORKDIR /wemake-src
 COPY ./django/requirements.txt /wemake-src/
 RUN pip install -r requirements.txt
-# COPY . /wemake-src/
+# COPY ./django/* /wemake-src/
