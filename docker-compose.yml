@@ -56,23 +56,23 @@ services:
   #*********************#
   #      Django         #
   #*********************#
-  wm_django_site:
-    build:
-      context: . 
-      dockerfile: ./docker-compose/dockerfile-django
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./django:/wemake-src
-    environment:
-      - DATABASE_NAME=wemake
-      - DATABASE_USER=wemake
-      - DATABASE_PASS=secret
-      - DATABASE_HOST=wemake-db
-      - DATABASE_PORT=3306
-    ports:
-      - "8000:8000"
-    depends_on:
-      - wemake-db
+  # wm_django_site:
+  #   build:
+  #     context: . 
+  #     dockerfile: ./docker-compose/dockerfile-django
+  #   command: python manage.py runserver 0.0.0.0:8000
+  #   volumes:
+  #     - ./django:/wemake-src
+  #   environment:
+  #     - DATABASE_NAME=wemake
+  #     - DATABASE_USER=wemake
+  #     - DATABASE_PASS=secret
+  #     - DATABASE_HOST=wemake-db
+  #     - DATABASE_PORT=3306
+  #   ports:
+  #     - "8000:8000"
+  #   depends_on:
+  #     - wemake-db
     
 
   #******************************************
