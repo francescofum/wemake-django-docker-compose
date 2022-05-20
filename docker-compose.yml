@@ -88,6 +88,7 @@ services:
     command: python python-interface/wemake-cura-server.py
     volumes:
       - ./django/src/media/STL:/STL
+      # - ./django/media/STL:/STL
       - ./slicers/cura:/cura
     environment:
       - USER=USER
