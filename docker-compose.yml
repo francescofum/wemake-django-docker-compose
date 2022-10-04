@@ -1,23 +1,6 @@
 version: '3.9'
 
 services:
-  
-  #*********************#
-  #        MySQL        #
-  #*********************#
-
-  # wemake-db:
-  #   image: mysql:latest
-  #   environment:
-  #     MYSQL_DATABASE: wemake
-  #     MYSQL_USER: wemake 
-  #     MYSQL_PASSWORD: secret
-  #     MYSQL_ROOT_PASSWORD: secret
-  #   ports:
-  #     - 7373:1433
-  #     - 3306:3306
-  #   volumes:
-  #     - ./mysql/data/mysql:/var/lib/mysql
 
   #*********************#
   #        MariaDb      #
@@ -53,26 +36,27 @@ services:
       - MYSQL_PASSWORD=secret
       - MYSQL_ROOT_PASSWORD=secret
 
-  #*********************#
+  # *********************#
   #      Django         #
-  #*********************#
-  # wm_django_site:
-  #   build:
-  #     context: . 
-  #     dockerfile: ./docker-compose/dockerfile-django
-  #   command: python manage.py runserver 0.0.0.0:8000
-  #   volumes:
-  #     - ./django:/wemake-src
-  #   environment:
-  #     - DATABASE_NAME=wemake
-  #     - DATABASE_USER=wemake
-  #     - DATABASE_PASS=secret
-  #     - DATABASE_HOST=wemake-db
-  #     - DATABASE_PORT=3306
-  #   ports:
-  #     - "8000:8000"
-  #   depends_on:
-  #     - wemake-db
+  # *********************#
+  wm_django_site:
+    build:
+      context: . 
+      dockerfile: ./docker-compose/dockerfile-django
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - ./django:/wemake-src
+    environment:
+      - DATABASE_NAME=wemake
+      - DATABASE_USER=wemake
+      - DATABASE_PASS=secret
+      - DATABASE_HOST=wemake-db
+      - DATABASE_PORT=3306
+    ports:
+      - 8000:8000
+      - 3002:3002 # debugging service (ptvsd)
+    depends_on:
+      - wemake-db
     
 
   #******************************************
