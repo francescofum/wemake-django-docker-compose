@@ -51,6 +51,7 @@ services:
       - DATABASE_PASS=secret
       - DATABASE_HOST=wemake-db
       - DATABASE_PORT=3306
+      - DEBUG=FALSE
     ports:
       - 8000:8000
       - 3002:3002 # debugging service (ptvsd)
@@ -58,7 +59,7 @@ services:
       - wemake-db
     
 
-  #******************************************
+  # ******************************************
   # The services below are all slicers. 
 
   #*********************#
@@ -74,10 +75,14 @@ services:
       # - ./django/media/STL:/STL
       - ./slicers/cura:/cura
     environment:
-      - USER=USER
-      - DEBUG=false
+      - USER=USER 
+      - DEBUG=TRUE       # When true the service won't start until
+                          # A debugger is attached on port 3002
+      - MOCK_SLICER=TRUE  # When set to true, the slicer won't run
+                          # dummy data will be generated instead. 
     ports:
       - 5555:5555
+      - 3003:3003  # cura debugger
 
 
 
