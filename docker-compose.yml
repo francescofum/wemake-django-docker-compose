@@ -75,6 +75,7 @@ services:
       - ./slicers/cura:/cura
     environment:
       - USER=USER
+      - DEBUG=false
     ports:
       - 5555:5555
 
